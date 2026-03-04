@@ -1,0 +1,6 @@
+@OpenClawApi_HostAddress = http://localhost:5282
+
+GET {{OpenClawApi_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
