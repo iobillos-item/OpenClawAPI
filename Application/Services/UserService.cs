@@ -56,6 +56,23 @@ public class UserService : IUserService
             .ToList();
     }
 
+    public async Task<UserResponseDto> GetUserByIdAsync(int id)
+    {
+        var user = await _userRepository.GetByIdAsync(id);
+        if (user is null)
+        {
+            throw new InvalidOperationException("User not found");
+        }
+
+        return new UserResponseDto
+        {
+            Id = user.Id,
+            Username = user.Username,
+            Email = user.Email,
+            CreatedAt = user.CreatedAt
+        };
+    }
+
     public async Task<UserResponseDto> UpdateUserAsync(int id, UpdateUserDto updateUserDto)
     {
         var user = await _userRepository.GetByIdAsync(id);
