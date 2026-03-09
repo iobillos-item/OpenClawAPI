@@ -29,8 +29,8 @@ jobs:
       run: dotnet publish OpenClawApi.csproj --configuration Release --no-build --output ./publish
 
     - name: Display PASSWORD secret
-      run: echo "PASSWORD:" ${{ secrets.PASSWORD }}
-
+      run: echo "PASSWORD:" ${{ ENV-SECRETS.PASSWORD }}
+               
     - name: Upload artifact
       uses: actions/upload-artifact@v4
       with:
