@@ -28,4 +28,11 @@ public class UsersController : ControllerBase
             return BadRequest(new { message = ex.Message });
         }
     }
+
+    [HttpGet]
+    public async Task<ActionResult<IReadOnlyList<UserResponseDto>>> GetUsers()
+    {
+        var users = await _userService.GetUsersAsync();
+        return Ok(users);
+    }
 }
