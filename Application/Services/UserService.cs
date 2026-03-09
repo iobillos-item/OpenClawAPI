@@ -89,7 +89,7 @@ public class UserService : IUserService
         var user = await _userRepository.GetByIdAsync(id);
         if (user is null)
         {
-            throw new InvalidOperationException("User not found");
+            throw new InvalidOperationException("User not found.");
         }
 
         return await _userRepository.DeleteAsync(id);
