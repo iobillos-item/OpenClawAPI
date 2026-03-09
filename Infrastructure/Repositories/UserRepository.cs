@@ -30,4 +30,29 @@ public class UserRepository : IUserRepository
     {
         return await _context.Users.FirstOrDefaultAsync(u => u.Email == email);
     }
+
+    public async Task<IReadOnlyList<User>> GetAllAsync()
+    {
+        return await _context.Users
+            .AsNoTracking()
+            .OrderBy(u => u.Id)
+            .ToListAsync();
+    }
+
+    public async Task<User> UpdateAsync(User user)
+    {
+        _context.Users.Update(user);
+        await _context.SaveChangesAsync();
+        return user;
+    }
+
+    public async Task<bool> DeleteAsync(int id)
+    {
+        var user = await _context.Users.FindAsync(id);
+        if (user is null) return false;
+
+        _context.Users.Remove(user);
+        await _context.SaveChangesAsync();
+        return true;
+    }
 }

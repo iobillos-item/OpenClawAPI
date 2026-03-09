@@ -40,4 +40,75 @@ public class UserService : IUserService
             CreatedAt = createdUser.CreatedAt
         };
     }
+
+    public async Task<IReadOnlyList<UserResponseDto>> GetUsersAsync()
+    {
+        var users = await _userRepository.GetAllAsync();
+
+        return users
+            .Select(u => new UserResponseDto
+            {
+                Id = u.Id,
+                Username = u.Username,
+                Email = u.Email,
+                CreatedAt = u.CreatedAt
+            })
+            .ToList();
+    }
+
+    public async Task<UserResponseDto> GetUserByIdAsync(int id)
+    {
+        var user = await _userRepository.GetByIdAsync(id);
+        if (user is null)
+        {
+            throw new InvalidOperationException("User not found");
+        }
+
+        return new UserResponseDto
+        {
+            Id = user.Id,
+            Username = user.Username,
+            Email = user.Email,
+            CreatedAt = user.CreatedAt
+        };
+    }
+
+    public async Task<UserResponseDto> UpdateUserAsync(int id, UpdateUserDto updateUserDto)
+    {
+        var user = await _userRepository.GetByIdAsync(id);
+        if (user is null)
+        {
+            throw new InvalidOperationException("User not found");
+        }
+
+        var existingUserWithEmail = await _userRepository.GetByEmailAsync(updateUserDto.Email);
+        if (existingUserWithEmail != null && existingUserWithEmail.Id != id)
+        {
+            throw new InvalidOperationException("User with this email already exists");
+        }
+
+        user.Username = updateUserDto.Username;
+        user.Email = updateUserDto.Email;
+
+        var updatedUser = await _userRepository.UpdateAsync(user);
+
+        return new UserResponseDto
+        {
+            Id = updatedUser.Id,
+            Username = updatedUser.Username,
+            Email = updatedUser.Email,
+            CreatedAt = updatedUser.CreatedAt
+        };
+    }
+
+    public async Task<bool> DeleteUserAsync(int id)
+    {
+        var user = await _userRepository.GetByIdAsync(id);
+        if (user is null)
+        {
+            throw new InvalidOperationException("User not found");
+        }
+
+        return await _userRepository.DeleteAsync(id);
+    }
 }

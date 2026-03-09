@@ -28,4 +28,39 @@ public class UsersController : ControllerBase
             return BadRequest(new { message = ex.Message });
         }
     }
+
+    [HttpGet]
+    public async Task<ActionResult<IReadOnlyList<UserResponseDto>>> GetUsers()
+    {
+        var users = await _userService.GetUsersAsync();
+        return Ok(users);
+    }
+
+    [HttpPut("{id:int}")]
+    public async Task<ActionResult<UserResponseDto>> UpdateUser([FromRoute] int id, [FromBody] UpdateUserDto updateUserDto)
+    {
+        try
+        {
+            var user = await _userService.UpdateUserAsync(id, updateUserDto);
+            return Ok(user);
+        }
+        catch (InvalidOperationException ex)
+        {
+            return BadRequest(new { message = ex.Message });
+        }
+    }
+
+    [HttpDelete("{id:int}")]
+    public async Task<IActionResult> DeleteUser([FromRoute] int id)
+    {
+        try
+        {
+            await _userService.DeleteUserAsync(id);
+            return NoContent();
+        }
+        catch (InvalidOperationException ex)
+        {
+            return NotFound(new { message = ex.Message });
+        }
+    }
 }
