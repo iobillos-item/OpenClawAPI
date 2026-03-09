@@ -9,6 +9,7 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+    environment: ENV-SECRETS
 
     steps:
     - name: Checkout
