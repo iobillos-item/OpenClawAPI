@@ -9,5 +9,6 @@ public interface IUserRepository
     Task<User?> GetByEmailAsync(string email);
     Task<IReadOnlyList<User>> GetAllAsync();
     Task<User> UpdateAsync(User user);
+    Task<bool> DeleteAsync(int id);
 }
     
