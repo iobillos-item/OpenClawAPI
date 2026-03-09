@@ -55,4 +55,32 @@ public class UserService : IUserService
             })
             .ToList();
     }
+
+    public async Task<UserResponseDto> UpdateUserAsync(int id, UpdateUserDto updateUserDto)
+    {
+        var user = await _userRepository.GetByIdAsync(id);
+        if (user is null)
+        {
+            throw new InvalidOperationException("User not found");
+        }
+
+        var existingUserWithEmail = await _userRepository.GetByEmailAsync(updateUserDto.Email);
+        if (existingUserWithEmail != null && existingUserWithEmail.Id != id)
+        {
+            throw new InvalidOperationException("User with this email already exists");
+        }
+
+        user.Username = updateUserDto.Username;
+        user.Email = updateUserDto.Email;
+
+        var updatedUser = await _userRepository.UpdateAsync(user);
+
+        return new UserResponseDto
+        {
+            Id = updatedUser.Id,
+            Username = updatedUser.Username,
+            Email = updatedUser.Email,
+            CreatedAt = updatedUser.CreatedAt
+        };
+    }
 }
