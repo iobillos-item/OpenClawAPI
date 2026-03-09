@@ -40,4 +40,19 @@ public class UserService : IUserService
             CreatedAt = createdUser.CreatedAt
         };
     }
+
+    public async Task<IReadOnlyList<UserResponseDto>> GetUsersAsync()
+    {
+        var users = await _userRepository.GetAllAsync();
+
+        return users
+            .Select(u => new UserResponseDto
+            {
+                Id = u.Id,
+                Username = u.Username,
+                Email = u.Email,
+                CreatedAt = u.CreatedAt
+            })
+            .ToList();
+    }
 }
