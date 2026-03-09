@@ -1,0 +1,39 @@
+name: .NET Core API
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    environment: ENV-SECRETS
+
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v4
+
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v4
+      with:
+        dotnet-version: 9.0.x
+
+    - name: Restore dependencies
+      run: dotnet restore OpenClawApi.csproj
+
+    - name: Build
+      run: dotnet build OpenClawApi.csproj --configuration Release --no-restore
+
+    - name: Publish
+      run: dotnet publish OpenClawApi.csproj --configuration Release --no-build --output ./publish
+
+    - name: Display PASSWORD secret
+      run: echo "PASSWORD:" ${{ secrets.PASSWORD }}
+               
+    - name: Upload artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: api-build
+        path: ./publish
