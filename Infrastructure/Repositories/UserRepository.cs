@@ -38,4 +38,11 @@ public class UserRepository : IUserRepository
             .OrderBy(u => u.Id)
             .ToListAsync();
     }
+
+    public async Task<User> UpdateAsync(User user)
+    {
+        _context.Users.Update(user);
+        await _context.SaveChangesAsync();
+        return user;
+    }
 }
