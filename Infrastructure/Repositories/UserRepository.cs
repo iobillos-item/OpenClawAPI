@@ -30,4 +30,12 @@ public class UserRepository : IUserRepository
     {
         return await _context.Users.FirstOrDefaultAsync(u => u.Email == email);
     }
+
+    public async Task<IReadOnlyList<User>> GetAllAsync()
+    {
+        return await _context.Users
+            .AsNoTracking()
+            .OrderBy(u => u.Id)
+            .ToListAsync();
+    }
 }
