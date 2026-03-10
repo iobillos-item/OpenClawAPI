@@ -1,10 +1,15 @@
-﻿################################################################################
-# This .gitignore file was automatically created by Microsoft(R) Visual Studio.
-################################################################################
+﻿## .NET
+**/bin/
+**/obj/
 
-/.vscode
-/bin/Debug/net9.0
-/obj
-/.vs
+## IDE
+.vs/
+.vscode/
+
+## Tools
 actionlint.exe
 actionlint.zip
+
+## OS
+Thumbs.db
+.DS_Store
