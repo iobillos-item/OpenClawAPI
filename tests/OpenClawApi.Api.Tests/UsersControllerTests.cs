@@ -33,7 +33,7 @@ public class UsersControllerTests
         {
             Id = 1,
             Username = dto.Username,
-            Email = dto.Email,
+            Email = "ivan.obillos@item.com",
             CreatedAt = DateTime.UtcNow
         };
 
